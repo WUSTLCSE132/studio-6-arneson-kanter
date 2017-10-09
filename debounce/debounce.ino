@@ -23,6 +23,7 @@ void pin_ISR(){
   if(tiempo - lastTime >= 150){
     count++;
     lastTime = tiempo;
+    Serial.println("Button Press");
   }
 }
 
