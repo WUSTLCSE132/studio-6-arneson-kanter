@@ -27,10 +27,35 @@ public class SerialComm {
 	}
 		
 	// TODO: Add writeByte() method from Studio 5
+	public void writeByte(byte b) throws SerialPortException {
+		port.writeByte(b);
+	}
 	
 	// TODO: Add available() method
-	
+	public boolean available() throws SerialPortException {
+		return port.getInputBufferBytesCount() > 0;
+	}
 	// TODO: Add readByte() method	
+	public byte readByte() throws SerialPortException {
+		return port.readBytes(1)[0];
+	}
+	
+	public long readBytes(int n) throws SerialPortException {
+		long ans = 0;
+		
+		for (int i = 0; i < n; i++) {
+			ans += (0xFF & readByte()) << (8*(n - i - 1));
+		}
+		return ans;
+	}
 	
 	// TODO: Add a main() method
+	public static void main(String[] args) throws SerialPortException {
+		SerialComm sc = new SerialComm("/dev/ttyUSB2");
+		sc.setDebug(true);
+		while (true)
+			if (sc.available())
+				//System.out.print(sc.debug ? String.format("%02x", sc.readByte())+"\n" : (char)sc.readByte());
+				System.out.println(sc.readBytes(4));
+	}
 }
